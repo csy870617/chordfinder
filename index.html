@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chord Finder</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>CHORD<span class="highlight">FINDER</span></h1>
+        </header>
+
+        <div class="controls">
+            <div class="select-wrapper">
+                <select id="instrument">
+                    <option value="guitar">Guitar</option>
+                    <option value="ukulele">Ukulele</option>
+                </select>
+            </div>
+
+            <div class="select-wrapper">
+                <select id="root-note">
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                </select>
+            </div>
+            
+            <div class="select-wrapper">
+                <select id="chord-type">
+                    <option value="major">Major</option>
+                    <option value="minor">Minor</option>
+                    <option value="7">7</option>
+                    <option value="sus4">sus4</option>
+                    <option value="sus2">sus2</option>
+                    <option value="maj7">Maj7</option>
+                    <option value="m7">m7</option>
+                    <option value="dim7">dim7</option>
+                    <option value="high_major">High</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="fretboard-wrapper">
+            <div class="fretboard-glass">
+                <svg id="fretboard" viewBox="0 0 260 260">
+                    <rect id="nut" x="50" y="30" width="160" height="8" />
+                    
+                    <g id="fret-lines"></g>
+                    <g id="strings"></g>
+                    <g id="fret-numbers"></g>
+                    <g id="finger-positions"></g>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="info-area">
+            <p id="chord-name-display">C Major</p>
+            <button id="play-btn">
+                <span>🎵 Play Strum</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="chords.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
