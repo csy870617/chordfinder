@@ -1,55 +1,37 @@
 :root {
-    /* 프리미엄 우드 팔레트 */
+    /* 프리미엄 우드 테마 색상 정의 */
     --bg-color: #1a0f08;
-    
-    /* 컨테이너: 아주 짙은 에보니/로즈우드 톤 (가독성 위해 어둡게) */
     --card-bg: rgba(30, 20, 10, 0.95);
     
-    --text-main: #f2e8d5; /* 상아색(Ivory) 텍스트 */
+    --text-main: #f2e8d5; /* 상아색 */
     --text-muted: #b09a82;
     
-    /* 포인트: 앤틱 골드 */
-    --accent-gold: #eebb44;
-    --accent-glow: rgba(238, 187, 68, 0.3);
+    --accent-gold: #eebb44; /* 금장 */
+    --accent-glow: rgba(238, 187, 68, 0.4);
     
     --fret-line: #a0a0a0;
-    --string-line: #d4c08e; /* 브론즈 줄 색상 */
+    --string-line: #d4c08e; /* 금색 줄 */
     
-    /* 테두리: 자개(Mother of Pearl) 느낌의 은은한 라인 */
+    --dropdown-bg: #2b1d12;
+    --dropdown-hover: #3d291a;
     --border-inlay: rgba(255, 255, 255, 0.15);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', 'Pretendard', sans-serif;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Pretendard', sans-serif; }
 
 body {
     display: flex;
     justify-content: center;
-    align-items: center; /* 수직 중앙 정렬 핵심 */
-    
-    /* 모바일 브라우저 주소창까지 고려한 높이 설정 */
+    align-items: center; /* 수직 중앙 정렬 */
     min-height: 100vh;
-    min-height: 100dvh; 
+    min-height: 100dvh; /* 모바일 대응 높이 */
     
     background-color: var(--bg-color);
-    
-    /* [디자인 핵심] 나무결이 살아있는 선버스트 배경 */
+    /* 리얼한 나무결 배경 */
     background-image: 
-        /* 1. 은은한 세로 나무결 텍스처 */
-        repeating-linear-gradient(90deg, 
-            rgba(255,255,255,0.03) 0px, 
-            rgba(255,255,255,0.03) 1px, 
-            transparent 1px, 
-            transparent 8px
-        ),
-        /* 2. 중앙에서 퍼지는 호박색 -> 짙은 갈색 -> 검정 (Sunburst) */
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 8px),
         radial-gradient(circle at 50% 40%, #9e6f36 0%, #4d2a13 50%, #0f0805 95%);
-        
-    background-attachment: fixed; /* 스크롤해도 배경 고정 */
+    background-attachment: fixed;
     color: var(--text-main);
     padding: 20px;
 }
@@ -57,259 +39,105 @@ body {
 .container {
     background: var(--card-bg);
     padding: 2.5rem;
-    border-radius: 36px; /* 더 둥글게 */
+    border-radius: 36px;
     width: 100%;
     max-width: 420px;
     text-align: center;
     
-    /* 고급 악기의 유광 마감(Gloss Finish) 느낌 */
+    /* 고급 마감 (Gloss Finish) */
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 
-        0 30px 60px rgba(0,0,0,0.9), /* 바닥 그림자 */
-        inset 0 0 0 1px rgba(255, 215, 0, 0.1), /* 금색 인레이 효과 */
-        inset 0 0 40px rgba(0,0,0,0.8); /* 내부 깊이감 */
-        
-    transition: transform 0.3s ease;
+        0 30px 60px rgba(0,0,0,0.9), 
+        inset 0 0 0 1px rgba(255, 215, 0, 0.1), 
+        inset 0 0 40px rgba(0,0,0,0.8);
 }
 
-/* 헤더 스타일 */
 header h1 {
-    font-size: 2.2rem;
-    font-weight: 900;
-    margin-bottom: 2rem;
-    letter-spacing: -0.5px;
-    color: var(--text-main);
-    /* 텍스트가 나무에 음각된 듯한 느낌 */
+    font-size: 2.2rem; font-weight: 900; margin-bottom: 2rem;
+    letter-spacing: -0.5px; color: var(--text-main);
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
+.highlight { color: var(--accent-gold); text-shadow: 0 0 15px var(--accent-glow); font-style: italic; }
 
-.highlight {
-    color: var(--accent-gold);
-    /* 금박 텍스트 느낌 */
-    text-shadow: 0 0 15px var(--accent-glow);
-    font-style: italic;
-}
-
-/* 컨트롤 영역 */
+/* 드롭다운 스타일 */
 .controls {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
+    display: flex; gap: 10px; justify-content: center;
+    margin-bottom: 30px; flex-wrap: wrap;
+    position: relative; z-index: 50; /* 지판 위에 뜨도록 */
 }
 
-.select-wrapper {
-    position: relative;
-    flex: 1;
-    min-width: 100px;
-}
+.dropdown-wrapper { position: relative; flex: 1; min-width: 100px; }
+.instrument-wrapper { flex: 1 1 100%; margin-bottom: 5px; } /* 악기 선택은 한 줄 차지 */
 
-/* 셀렉트 박스 디자인 */
-select {
-    width: 100%;
-    appearance: none;
-    /* 아주 어두운 나무색 */
-    background-color: #2b1d12;
-    color: var(--text-main);
-    padding: 14px 10px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    
-    border: 1px solid var(--border-inlay);
-    border-radius: 16px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease;
+.custom-dropdown { position: relative; width: 100%; }
+
+.dropdown-btn {
+    width: 100%; background-color: var(--dropdown-bg);
+    color: var(--text-main); padding: 14px 10px;
+    font-size: 0.95rem; font-weight: 700;
+    border: 1px solid var(--border-inlay); border-radius: 16px;
+    cursor: pointer; text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    
     /* 화살표 아이콘 */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23eebb44' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px;
-    padding-right: 25px;
-    text-overflow: ellipsis;
+    background-repeat: no-repeat; background-position: right 10px center; background-size: 16px;
+    padding-right: 30px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-select:hover {
-    background-color: #3d291a;
-    border-color: var(--accent-gold);
-    transform: translateY(-1px);
-}
-
-select:focus {
-    outline: none;
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 2px var(--accent-glow);
-}
-
-select option {
+.dropdown-content {
+    display: none; position: absolute;
+    top: 115%; left: 0; width: 100%;
     background-color: #2b1d12;
-    color: var(--text-main);
+    border: 1px solid var(--accent-gold); border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+    z-index: 100; max-height: 250px; overflow-y: auto;
 }
-
-#instrument {
-    color: var(--accent-gold);
-    font-weight: 800;
-    letter-spacing: 0.5px;
-}
+.custom-dropdown.active .dropdown-content { display: block; }
+.dropdown-item { padding: 12px; cursor: pointer; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.dropdown-item:hover { background-color: var(--dropdown-hover); color: var(--accent-gold); }
 
 /* 지판 영역 */
 .fretboard-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    position: relative;
-    width: 100%;
+    display: flex; justify-content: center; margin-bottom: 1.5rem;
+    position: relative; width: 100%; z-index: 1;
 }
-
 .fretboard-glass {
-    padding: 20px;
-    /* 지판 배경: 흑단(Ebony) 느낌의 아주 어두운 회갈색 */
-    background: #18100a; 
-    border-radius: 24px;
-    /* 테두리 없음, 깔끔하게 */
-    box-shadow: 
-        inset 0 0 20px rgba(0,0,0,1), /* 안쪽으로 깊숙이 들어간 느낌 */
-        0 1px 0 rgba(255,255,255,0.1); /* 하단 하이라이트 */
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 100%;
-    overflow: hidden;
+    padding: 20px; background: #18100a; border-radius: 24px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.1);
+    display: flex; justify-content: center; align-items: center;
+    width: 100%; overflow: hidden;
 }
+svg { width: 100%; max-width: 260px; height: auto; display: block; overflow: visible; }
 
-svg {
-    width: 100%;
-    max-width: 260px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    overflow: visible;
-}
-
-/* SVG 내부 */
-#nut { fill: #f2e8d5; rx: 2; opacity: 0.9; } /* 상아 너트 */
+#nut { fill: #f2e8d5; rx: 2; opacity: 0.9; }
 .fret { stroke: var(--fret-line); stroke-width: 2.5; stroke-linecap: round; }
 .string { stroke: var(--string-line); stroke-width: 2; opacity: 0.8; }
 .fret-num { fill: var(--text-muted); font-size: 13px; font-weight: 700; opacity: 0.6; }
-.finger-text { fill: var(--text-muted); font-size: 18px; font-weight: 900; }
 
-/* 운지 점: 자개(Pearl) 인레이 느낌 */
-.finger-dot.filled {
-    fill: #fffdf0;
-    stroke: none;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4)); /* 은은한 발광 */
-    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+/* 자개 인레이 느낌의 점 */
+.finger-dot.filled { fill: #fffdf0; stroke: none; filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4)); }
+.finger-dot.open { fill: transparent; stroke: var(--accent-gold); stroke-width: 3; filter: drop-shadow(0 0 3px var(--accent-gold)); }
+.finger-text, .finger-num-text { fill: #2b1d12; font-weight: 900; pointer-events: none; }
+.finger-text { fill: var(--text-muted); font-size: 18px; } .finger-num-text { font-size: 11px; }
 
-.finger-dot.open {
-    fill: transparent;
-    stroke: var(--accent-gold);
-    stroke-width: 3;
-    filter: drop-shadow(0 0 3px var(--accent-gold));
-}
-
-.finger-num-text {
-    fill: #2b1d12;
-    font-size: 11px;
-    font-weight: 900;
-    pointer-events: none;
-}
-
-/* 정보 영역 */
-.info-area {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
+/* 정보 및 재생 */
+.info-area { margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
 #chord-name-display {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--accent-gold);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    padding: 12px 30px;
-    
-    background: #2b1d12;
-    border-radius: 16px;
-    /* 금박 테두리 장식 */
-    border: 1px solid var(--accent-gold);
+    font-size: 1.5rem; font-weight: 800; color: var(--accent-gold);
+    text-transform: uppercase; letter-spacing: 2px; padding: 12px 30px;
+    background: #2b1d12; border-radius: 16px; border: 1px solid var(--accent-gold);
     box-shadow: 0 4px 15px rgba(0,0,0,0.6);
 }
-
-/* Play 버튼: 금속(Brass) 노브 느낌 */
 #play-btn {
     background: linear-gradient(145deg, #eebb44 0%, #b8860b 100%);
-    border: none;
-    border-radius: 50px;
-    padding: 14px 35px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #2b1d12; /* 글자색 어둡게 */
-    
-    /* 입체적인 금속 질감 */
-    box-shadow: 
-        0 5px 15px rgba(0,0,0,0.5),
-        inset 0 2px 0 rgba(255,255,255,0.4);
-        
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    border: none; border-radius: 50px; padding: 14px 35px;
+    cursor: pointer; font-size: 1rem; font-weight: 700; color: #2b1d12;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.4);
+    display: flex; align-items: center; gap: 8px;
 }
+#play-btn:active { transform: translateY(1px); }
 
-#play-btn:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-}
-
-#play-btn:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.6);
-}
-
-@keyframes popIn {
-    0% { transform: scale(0); opacity: 0; transform-origin: center; }
-    100% { transform: scale(1); opacity: 1; transform-origin: center; }
-}
-
-/* 모바일 대응 */
 @media (max-width: 480px) {
-    /* 모바일에서 상단으로 붙는 현상 수정됨 */
-    body {
-        /* 위아래 여백 균등하게 */
-        padding: 20px; 
-    }
-    
-    .container {
-        padding: 1.5rem;
-        border-radius: 28px;
-        /* 작은 화면에서도 그림자 유지 */
-        box-shadow: 0 15px 30px rgba(0,0,0,0.9);
-    }
-    
-    header h1 {
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .controls {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    .select-wrapper:first-child { flex: 1 1 100%; }
-    .select-wrapper { flex: 1 1 40%; }
-    
-    #chord-name-display {
-        width: 100%;
-        box-sizing: border-box;
-    }
+    .dropdown-wrapper { flex: 1 1 45%; }
 }
