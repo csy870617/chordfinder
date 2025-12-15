@@ -1,4 +1,4 @@
-// 상태 변수
+// 상태 변수 (기본값 C로 변경)
 let state = {
     instrument: 'guitar',
     root: 'C',
@@ -7,20 +7,15 @@ let state = {
 
 const playBtn = document.getElementById('play-btn');
 
-// 실행
 document.addEventListener('DOMContentLoaded', () => {
     setupDropdowns();
-    // 데이터 로드 확인 후 실행
     if (typeof instrumentData !== 'undefined') {
         updateChord();
-    } else {
-        alert("chords.js 파일이 로드되지 않았습니다.");
     }
 });
 
 playBtn.addEventListener('click', playChord);
 
-// 드롭다운 설정
 function setupDropdowns() {
     const dropdowns = document.querySelectorAll('.custom-dropdown');
     dropdowns.forEach(dropdown => {
@@ -29,8 +24,9 @@ function setupDropdowns() {
 
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            closeAllDropdowns(dropdown);
-            dropdown.classList.toggle('active');
+            const isActive = dropdown.classList.contains('active');
+            closeAllDropdowns();
+            if (!isActive) dropdown.classList.add('active');
         });
 
         items.forEach(item => {
@@ -52,10 +48,8 @@ function setupDropdowns() {
     document.addEventListener('click', () => closeAllDropdowns());
 }
 
-function closeAllDropdowns(except) {
-    document.querySelectorAll('.custom-dropdown').forEach(dd => {
-        if (dd !== except) dd.classList.remove('active');
-    });
+function closeAllDropdowns() {
+    document.querySelectorAll('.custom-dropdown').forEach(dd => dd.classList.remove('active'));
 }
 
 // 그리기 로직
@@ -72,17 +66,22 @@ const tuningFreq = {
     "ukulele": [392.00, 261.63, 329.63, 440.00] 
 };
 
+const typeNameMap = {
+    'major': 'Major', 'minor': 'Minor', '7': '7', 'sus4': 'sus4',
+    'sus2': 'sus2', 'maj7': 'Maj7', 'm7': 'm7', 'dim7': 'dim7',
+    'high_major': 'Major (High)'
+};
+
 function updateChord() {
     const { instrument, root, type } = state;
     
-    // 데이터 체크
     if (typeof instrumentData === 'undefined') return;
 
     const instConfig = instrumentData[instrument];
     const data = (instConfig.chords[root] && instConfig.chords[root][type]) ? instConfig.chords[root][type] : null;
 
     currentChordData = data;
-    const instName = instrument === 'guitar' ? 'GUITAR' : 'UKULELE';
+    const instName = instrument === 'guitar' ? 'Guitar' : 'Ukulele';
     
     if (!data) {
         chordNameDisplay.innerHTML = `<span style="font-size:0.6em; opacity:0.7">${instName}</span><br>준비중`;
@@ -90,10 +89,8 @@ function updateChord() {
         return;
     }
     
-    let typeDisplay = type.replace('_', ' ');
-    if(type === 'high_major') typeDisplay = 'Major (High)';
-
-    chordNameDisplay.innerHTML = `<span style="font-size:0.6em; opacity:0.7">${instName}</span><br>${root} ${typeDisplay}`;
+    const displayType = typeNameMap[type] || type;
+    chordNameDisplay.innerHTML = `<span style="font-size:0.6em; opacity:0.7">${instName}</span><br>${root} ${displayType}`;
     
     clearBoard();
     drawBoard(instrument, instConfig, data);
@@ -107,12 +104,10 @@ function drawBoard(instrument, instConfig, data) {
     nutElement.setAttribute("x", startX);
     nutElement.setAttribute("width", nutWidth);
 
-    // 프렛
     for (let i = 0; i < 6; i++) {
         const y = 30 + (i * 40);
         createSVG('line', { x1: startX, y1: y, x2: startX + nutWidth, y2: y, class: 'fret' }, fretLinesGroup);
     }
-    // 줄
     for (let i = 0; i < stringCount; i++) {
         const x = startX + (i * 32);
         createSVG('line', { x1: x, y1: 30, x2: x, y2: 230, class: 'string' }, stringsGroup);
@@ -128,10 +123,9 @@ function drawBoard(instrument, instConfig, data) {
 
     for (let i = 0; i < 5; i++) {
         const num = startFret + i;
-        const text = createSVG('text', {
+        createSVG('text', {
             x: startX - 25, y: 50 + (i * 40), class: 'fret-num', "text-anchor": "middle", "dominant-baseline": "middle"
-        }, fretNumGroup);
-        text.textContent = num;
+        }, fretNumGroup).textContent = num;
     }
 
     data.frets.forEach((fret, idx) => {
@@ -154,7 +148,6 @@ function drawBoard(instrument, instConfig, data) {
     });
 }
 
-// 오디오 재생
 let audioCtx = null;
 function playChord() {
     if (!currentChordData) return;
@@ -193,21 +186,18 @@ function clearBoard() {
     fretLinesGroup.innerHTML = ''; stringsGroup.innerHTML = '';
     fingerGroup.innerHTML = ''; fretNumGroup.innerHTML = '';
 }
-
 function createSVG(type, attributes, parent) {
     const el = document.createElementNS("http://www.w3.org/2000/svg", type);
     for (const key in attributes) el.setAttribute(key, attributes[key]);
     if (parent) parent.appendChild(el);
     return el;
 }
-
 function drawCircle(x, y, isFilled, fingerNum) {
     const group = createSVG('g', {}, fingerGroup);
     createSVG('circle', {
         cx: x, cy: y, r: isFilled ? 12 : 7,
         class: isFilled ? 'finger-dot filled' : 'finger-dot open'
     }, group);
-    
     if (isFilled && fingerNum > 0) {
         const text = createSVG('text', {
             x: x, y: y + 5, "text-anchor": "middle", class: "finger-num-text"
