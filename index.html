@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Chord Finder</title>
+    <title>Premium Chord Finder Pro</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -12,69 +12,133 @@
 
     <div class="container">
         <header>
-            <h1>CHORD<span class="highlight">FINDER</span></h1>
+            <h1>CHORD<span class="highlight">FINDER</span><span class="pro-badge">PRO</span></h1>
         </header>
 
-        <div class="controls">
-            <div class="dropdown-wrapper instrument-wrapper">
-                <div class="custom-dropdown" id="dd-instrument">
-                    <button class="dropdown-btn">Guitar</button>
-                    <div class="dropdown-content">
-                        <div class="dropdown-item" data-value="guitar">Guitar</div>
-                        <div class="dropdown-item" data-value="ukulele">Ukulele</div>
-                    </div>
-                </div>
-            </div>
+        <!-- 악기 선택 탭 -->
+        <div class="instrument-tabs">
+            <button class="tab-btn active" data-instrument="guitar">
+                <span class="tab-icon">🎸</span> Guitar
+            </button>
+            <button class="tab-btn" data-instrument="ukulele">
+                <span class="tab-icon">🪕</span> Ukulele
+            </button>
+        </div>
 
-            <div class="dropdown-wrapper">
-                <div class="custom-dropdown" id="dd-root">
-                    <button class="dropdown-btn">C</button> <div class="dropdown-content">
-                        <div class="dropdown-item" data-value="C">C</div>
-                        <div class="dropdown-item" data-value="D">D</div>
-                        <div class="dropdown-item" data-value="E">E</div>
-                        <div class="dropdown-item" data-value="F">F</div>
-                        <div class="dropdown-item" data-value="G">G</div>
-                        <div class="dropdown-item" data-value="A">A</div>
-                        <div class="dropdown-item" data-value="B">B</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="dropdown-wrapper">
-                <div class="custom-dropdown" id="dd-type">
-                    <button class="dropdown-btn">Major</button>
-                    <div class="dropdown-content">
-                        <div class="dropdown-item" data-value="major">Major</div>
-                        <div class="dropdown-item" data-value="minor">Minor</div>
-                        <div class="dropdown-item" data-value="7">7</div>
-                        <div class="dropdown-item" data-value="sus4">sus4</div>
-                        <div class="dropdown-item" data-value="sus2">sus2</div>
-                        <div class="dropdown-item" data-value="maj7">Maj7</div>
-                        <div class="dropdown-item" data-value="m7">m7</div>
-                        <div class="dropdown-item" data-value="dim7">dim7</div>
-                        <div class="dropdown-item" data-value="high_major">High</div>
-                    </div>
-                </div>
+        <!-- 루트음 선택 (12음계) -->
+        <div class="root-selector">
+            <div class="root-grid">
+                <button class="root-btn active" data-root="C">C</button>
+                <button class="root-btn" data-root="C#">C#</button>
+                <button class="root-btn" data-root="D">D</button>
+                <button class="root-btn" data-root="D#">D#</button>
+                <button class="root-btn" data-root="E">E</button>
+                <button class="root-btn" data-root="F">F</button>
+                <button class="root-btn" data-root="F#">F#</button>
+                <button class="root-btn" data-root="G">G</button>
+                <button class="root-btn" data-root="G#">G#</button>
+                <button class="root-btn" data-root="A">A</button>
+                <button class="root-btn" data-root="A#">A#</button>
+                <button class="root-btn" data-root="B">B</button>
             </div>
         </div>
 
+        <!-- 코드 타입 선택 -->
+        <div class="type-selector">
+            <div class="type-grid">
+                <button class="type-btn active" data-type="major">Major</button>
+                <button class="type-btn" data-type="minor">minor</button>
+                <button class="type-btn" data-type="7">7</button>
+                <button class="type-btn" data-type="m7">m7</button>
+                <button class="type-btn" data-type="maj7">Maj7</button>
+                <button class="type-btn" data-type="sus2">sus2</button>
+                <button class="type-btn" data-type="sus4">sus4</button>
+                <button class="type-btn" data-type="dim">dim</button>
+                <button class="type-btn" data-type="aug">aug</button>
+                <button class="type-btn" data-type="add9">add9</button>
+                <button class="type-btn" data-type="6">6</button>
+                <button class="type-btn" data-type="9">9</button>
+            </div>
+        </div>
+
+        <!-- 옵션 바 -->
+        <div class="options-bar">
+            <div class="option-item">
+                <label class="option-label">카포</label>
+                <div class="capo-control">
+                    <button class="capo-btn" id="capo-minus">−</button>
+                    <span class="capo-value" id="capo-value">0</span>
+                    <button class="capo-btn" id="capo-plus">+</button>
+                </div>
+            </div>
+            <div class="option-item">
+                <label class="option-label">왼손잡이</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="lefty-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="option-item">
+                <label class="option-label">음이름</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="note-toggle" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 프렛보드 -->
         <div class="fretboard-wrapper">
             <div class="fretboard-glass">
-                <svg id="fretboard" viewBox="0 0 260 260">
-                    <rect id="nut" x="50" y="30" width="160" height="8" />
+                <svg id="fretboard" viewBox="0 0 280 280">
+                    <defs>
+                        <linearGradient id="nutGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ccc;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="dotGlow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <rect id="nut" x="50" y="30" width="160" height="8" fill="url(#nutGradient)" />
+                    <g id="fret-markers"></g>
                     <g id="fret-lines"></g>
                     <g id="strings"></g>
                     <g id="fret-numbers"></g>
                     <g id="finger-positions"></g>
                 </svg>
             </div>
+            <!-- 포지션 네비게이션 -->
+            <div class="position-nav">
+                <button class="pos-nav-btn" id="prev-pos-btn">‹</button>
+                <div class="position-indicator">
+                    <span id="position-label">포지션 1/3</span>
+                </div>
+                <button class="pos-nav-btn" id="next-pos-btn">›</button>
+            </div>
         </div>
         
+        <!-- 코드 정보 -->
         <div class="info-area">
-            <p id="chord-name-display">C Major</p>
-            <button id="play-btn">
-                <span>🎵 Play Strum</span>
+            <div class="chord-info-card">
+                <p id="chord-name-display">C Major</p>
+                <p id="chord-notes" class="chord-notes">C - E - G</p>
+            </div>
+            
+            <button id="play-btn" class="play-button">
+                <span class="play-icon">▶</span>
+                <span>스트럼 재생</span>
             </button>
+        </div>
+
+        <!-- 관련 코드 추천 -->
+        <div class="related-chords">
+            <h3>🎵 관련 코드</h3>
+            <div class="related-grid" id="related-chords-grid"></div>
         </div>
     </div>
 
