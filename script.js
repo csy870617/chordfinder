@@ -152,6 +152,7 @@ function updateChord() {
         chordNameDisplay.textContent = `${root} ${formatTypeName(type)}`;
         chordNotesDisplay.textContent = '데이터 준비중';
         clearBoard();
+        currentChordData = null;
         currentPositions = [];
         updatePositionNav();
         return;
@@ -166,13 +167,27 @@ function updateChord() {
 
     currentChordData = currentPositions[state.currentPosition];
 
-    // 코드명 표시
-    chordNameDisplay.textContent = `${root} ${formatTypeName(type)}`;
+    // 코드명 표시 (카포 적용 시 실제 울리는 코드도 표시)
+    const typeName = formatTypeName(type);
+    if (state.capo > 0) {
+        const soundingRootIndex = (noteNames.indexOf(root) + state.capo) % 12;
+        const soundingRoot = noteNames[soundingRootIndex];
+        chordNameDisplay.textContent = `${root} ${typeName} (실음: ${soundingRoot} ${typeName})`;
+    } else {
+        chordNameDisplay.textContent = `${root} ${typeName}`;
+    }
 
-    // 구성음 표시
+    // 구성음 표시 (카포 적용 시 실제 울리는 구성음도 표시)
     if (typeof getChordNoteNames === 'function') {
         const notes = getChordNoteNames(root, type);
-        chordNotesDisplay.textContent = notes.join(' - ');
+        if (state.capo > 0) {
+            const soundingNotes = notes.map(n => {
+                return noteNames[(noteNames.indexOf(n) + state.capo) % 12];
+            });
+            chordNotesDisplay.textContent = `${notes.join(' - ')} → ${soundingNotes.join(' - ')}`;
+        } else {
+            chordNotesDisplay.textContent = notes.join(' - ');
+        }
     }
 
     // 프렛보드 그리기
@@ -245,7 +260,10 @@ function drawBoard(instrument, instConfig, data) {
     const minFret = activeFrets.length > 0 ? Math.min(...activeFrets) : 1;
     const maxFret = activeFrets.length > 0 ? Math.max(...activeFrets) : 1;
     let startFret = 1;
-    if (maxFret > 5) startFret = minFret;
+    if (maxFret > 5) {
+        // 모든 프렛 위치가 5프렛 범위 안에 들어오도록 startFret 조정
+        startFret = Math.max(1, maxFret - 4);
+    }
 
     // 너트 표시
     nutElement.setAttribute("visibility", startFret === 1 ? "visible" : "hidden");
@@ -439,7 +457,13 @@ function playChord() {
     if (!currentChordData) return;
     
     if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            console.error('AudioContext를 초기화할 수 없습니다:', e);
+            playBtn.disabled = true;
+            return;
+        }
     }
     if (audioCtx.state === 'suspended') {
         audioCtx.resume();
