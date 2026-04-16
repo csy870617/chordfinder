@@ -597,6 +597,9 @@ svg#fretboard {
     transform: scaleX(-1);
 }
 
-.fretboard-glass.lefty .fret-num {
+.fretboard-glass.lefty .fret-num,
+.fretboard-glass.lefty .note-name-text,
+.fretboard-glass.lefty .finger-num-text,
+.fretboard-glass.lefty .finger-text {
     transform: scaleX(-1);
 }
