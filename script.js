@@ -204,7 +204,7 @@ function updateChord() {
 // 포지션 네비게이션 UI 업데이트
 function updatePositionNav() {
     const total = currentPositions.length;
-    const current = state.currentPosition + 1;
+    const current = total === 0 ? 0 : state.currentPosition + 1;
 
     positionLabel.textContent = `포지션 ${current}/${total}`;
 
@@ -262,7 +262,8 @@ function drawBoard(instrument, instConfig, data) {
     let startFret = 1;
     if (maxFret > 5) {
         // 모든 프렛 위치가 5프렛 범위 안에 들어오도록 startFret 조정
-        startFret = Math.max(1, maxFret - 4);
+        // (minFret보다 커지면 낮은 프렛 음이 누락되므로 minFret을 상한으로 둠)
+        startFret = Math.max(1, Math.min(minFret, maxFret - 4));
     }
 
     // 너트 표시
@@ -465,28 +466,35 @@ function playChord() {
             return;
         }
     }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-
-    const instrument = state.instrument;
-    const instConfig = instrumentData[instrument];
-    const baseFreqs = instConfig.tuningFreq;
-    const frets = currentChordData.frets;
-    let delay = 0;
-
     // 버튼 애니메이션
     playBtn.style.transform = 'scale(0.95)';
     setTimeout(() => playBtn.style.transform = '', 100);
 
-    frets.forEach((fret, index) => {
-        if (fret !== -1) {
-            const actualFret = fret + state.capo;
-            const frequency = baseFreqs[index] * Math.pow(2, actualFret / 12);
-            playTone(frequency, audioCtx.currentTime + delay);
-            delay += 0.04;
-        }
-    });
+    const strum = () => {
+        const instrument = state.instrument;
+        const instConfig = instrumentData[instrument];
+        const baseFreqs = instConfig.tuningFreq;
+        const frets = currentChordData.frets;
+        let delay = 0;
+
+        frets.forEach((fret, index) => {
+            if (fret !== -1) {
+                const actualFret = fret + state.capo;
+                const frequency = baseFreqs[index] * Math.pow(2, actualFret / 12);
+                playTone(frequency, audioCtx.currentTime + delay);
+                delay += 0.04;
+            }
+        });
+    };
+
+    // suspended 상태에서는 오디오 시계가 멈춰 있어 resume 완료 후 예약해야 스트럼이 정확함
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume().then(strum).catch(e => {
+            console.error('AudioContext를 재개할 수 없습니다:', e);
+        });
+    } else {
+        strum();
+    }
 }
 
 // 톤 재생
