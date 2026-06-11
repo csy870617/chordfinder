@@ -601,5 +601,8 @@ svg#fretboard {
 .fretboard-glass.lefty .note-name-text,
 .fretboard-glass.lefty .finger-num-text,
 .fretboard-glass.lefty .finger-text {
+    /* SVG 기본 기준점은 viewBox 원점이라 글자가 점에서 분리됨 → 글자 자신을 기준으로 반전 */
+    transform-box: fill-box;
+    transform-origin: center;
     transform: scaleX(-1);
 }
