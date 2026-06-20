@@ -111,6 +111,12 @@ function setupToggles() {
     const leftyToggle = document.getElementById('lefty-toggle');
     const noteToggle = document.getElementById('note-toggle');
 
+    // 브라우저 뒤로가기 캐시(bfcache)가 체크박스를 복원할 수 있으므로
+    // 실제 DOM 값에서 상태를 동기화한 뒤 왼손잡이 클래스도 반영
+    state.lefty = leftyToggle.checked;
+    state.showNotes = noteToggle.checked;
+    fretboardGlass.classList.toggle('lefty', state.lefty);
+
     leftyToggle.addEventListener('change', (e) => {
         state.lefty = e.target.checked;
         fretboardGlass.classList.toggle('lefty', state.lefty);
@@ -336,11 +342,12 @@ function drawBoard(instrument, instConfig, data) {
             const relativeFret = fret - startFret + 1;
             if (relativeFret >= 1 && relativeFret <= 5) {
                 const y = 30 + (relativeFret * 40) - 20;
-                
-                // 루트음 확인
-                const chordRoot = state.root;
-                const isRoot = playedNote === chordRoot;
-                
+
+                // 루트음 확인 (점에 표시되는 음이름은 카포가 반영된 실음이므로
+                // 루트 강조도 실음 루트와 비교해야 일치함)
+                const soundingRoot = noteNames[(noteNames.indexOf(state.root) + state.capo) % 12];
+                const isRoot = playedNote === soundingRoot;
+
                 drawCircle(x, y, true, finger, playedNote, isRoot);
             }
         }
@@ -471,6 +478,8 @@ function playChord() {
     setTimeout(() => playBtn.style.transform = '', 100);
 
     const strum = () => {
+        // resume() 대기 중 코드가 바뀌어 데이터가 사라졌을 수 있으므로 재확인
+        if (!currentChordData) return;
         const instrument = state.instrument;
         const instConfig = instrumentData[instrument];
         const baseFreqs = instConfig.tuningFreq;
