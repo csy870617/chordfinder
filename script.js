@@ -24,6 +24,7 @@ const nextPosBtn = document.getElementById('next-pos-btn');
 const positionLabel = document.getElementById('position-label');
 const relatedGrid = document.getElementById('related-chords-grid');
 const fretboardGlass = document.querySelector('.fretboard-glass');
+const themeToggle = document.getElementById('theme-toggle');
 
 let currentChordData = null;
 let currentPositions = [];
@@ -31,6 +32,7 @@ let audioCtx = null;
 
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
+    setupTheme();
     setupInstrumentTabs();
     setupRootButtons();
     setupTypeButtons();
@@ -40,6 +42,58 @@ document.addEventListener('DOMContentLoaded', () => {
     playBtn.addEventListener('click', playChord);
     updateChord();
 });
+
+// 테마 설정 (자동 → 라이트 → 다크 순환, 선택값 저장)
+function setupTheme() {
+    const THEME_KEY = 'theme';
+    const order = ['auto', 'light', 'dark'];
+    const icon = { auto: '🌗', light: '☀️', dark: '🌙' };
+    const name = { auto: '자동', light: '라이트', dark: '다크' };
+    const media = window.matchMedia
+        ? window.matchMedia('(prefers-color-scheme: dark)')
+        : null;
+
+    let pref;
+    try {
+        pref = localStorage.getItem(THEME_KEY) || 'auto';
+    } catch (e) {
+        pref = 'auto';
+    }
+    if (!order.includes(pref)) pref = 'auto';
+
+    function resolve(p) {
+        if (p === 'light' || p === 'dark') return p;
+        return media && media.matches ? 'dark' : 'light';
+    }
+
+    function apply() {
+        document.documentElement.setAttribute('data-theme', resolve(pref));
+        if (themeToggle) {
+            themeToggle.textContent = icon[pref];
+            themeToggle.title = `테마: ${name[pref]}`;
+            themeToggle.setAttribute('aria-label', `테마 전환 (현재: ${name[pref]})`);
+        }
+    }
+
+    apply();
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            pref = order[(order.indexOf(pref) + 1) % order.length];
+            try {
+                localStorage.setItem(THEME_KEY, pref);
+            } catch (e) { /* 저장 불가 시 무시 */ }
+            apply();
+        });
+    }
+
+    // 자동 모드일 때 OS 테마 변경을 실시간 반영
+    if (media) {
+        const onChange = () => { if (pref === 'auto') apply(); };
+        if (media.addEventListener) media.addEventListener('change', onChange);
+        else if (media.addListener) media.addListener(onChange);
+    }
+}
 
 // 악기 탭 설정
 function setupInstrumentTabs() {
