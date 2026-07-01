@@ -100,8 +100,12 @@ function setupInstrumentTabs() {
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-pressed', 'false');
+            });
             tab.classList.add('active');
+            tab.setAttribute('aria-pressed', 'true');
             state.instrument = tab.dataset.instrument;
             state.currentPosition = 0;
             updateChord();
@@ -114,8 +118,12 @@ function setupRootButtons() {
     const rootBtns = document.querySelectorAll('.root-btn');
     rootBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            rootBtns.forEach(b => b.classList.remove('active'));
+            rootBtns.forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
             btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
             state.root = btn.dataset.root;
             state.currentPosition = 0;
             updateChord();
@@ -128,8 +136,12 @@ function setupTypeButtons() {
     const typeBtns = document.querySelectorAll('.type-btn');
     typeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            typeBtns.forEach(b => b.classList.remove('active'));
+            typeBtns.forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
             btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
             state.type = btn.dataset.type;
             state.currentPosition = 0;
             updateChord();
@@ -319,12 +331,10 @@ function drawBoard(instrument, instConfig, data) {
     const activeFrets = data.frets.filter(f => f > 0);
     const minFret = activeFrets.length > 0 ? Math.min(...activeFrets) : 1;
     const maxFret = activeFrets.length > 0 ? Math.max(...activeFrets) : 1;
-    let startFret = 1;
-    if (maxFret > 5) {
-        // 모든 프렛 위치가 5프렛 범위 안에 들어오도록 startFret 조정
-        // (minFret보다 커지면 낮은 프렛 음이 누락되므로 minFret을 상한으로 둠)
-        startFret = Math.max(1, Math.min(minFret, maxFret - 4));
-    }
+    // 창(5프렛)에 폭이 다 안 들어올 만큼 넓게 벌어진 경우, 가장 높은 프렛이
+    // 항상 보이도록 고정한다 (minFret을 기준으로 삼으면 반대로 높은 프렛이
+    // 창 밖으로 밀려나 아예 그려지지 않는 경우가 생길 수 있었음)
+    const startFret = Math.max(1, maxFret - 4);
 
     // 너트 표시
     nutElement.setAttribute("visibility", startFret === 1 ? "visible" : "hidden");
@@ -465,11 +475,15 @@ function updateRelatedChords() {
         btn.addEventListener('click', () => {
             // 루트음 변경
             document.querySelectorAll('.root-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.root === rel.root);
+                const isActive = b.dataset.root === rel.root;
+                b.classList.toggle('active', isActive);
+                b.setAttribute('aria-pressed', String(isActive));
             });
             // 타입 변경
             document.querySelectorAll('.type-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.type === rel.type);
+                const isActive = b.dataset.type === rel.type;
+                b.classList.toggle('active', isActive);
+                b.setAttribute('aria-pressed', String(isActive));
             });
             state.root = rel.root;
             state.type = rel.type;

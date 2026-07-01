@@ -559,6 +559,11 @@ svg#fretboard {
     transform: scale(0.98);
 }
 
+.play-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
 .play-icon {
     font-size: 0.85em;
 }
