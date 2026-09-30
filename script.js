@@ -31,6 +31,7 @@ const themeToggle = document.getElementById('theme-toggle');
 let currentChordData = null;
 let currentPositions = [];
 let audioCtx = null;
+let masterBus = null;
 
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
@@ -245,6 +246,8 @@ function updateChord() {
         currentChordData = null;
         currentPositions = [];
         updatePositionNav();
+        // 이전 코드 기준의 관련 코드가 남지 않도록 현재 선택으로 갱신
+        updateRelatedChords();
         return;
     }
 
@@ -496,6 +499,7 @@ function updateRelatedChords() {
     
     relatedTypes.forEach(rel => {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = 'related-chord-btn';
         btn.innerHTML = `${rel.root}${rel.suffix}<span class="chord-label">${rel.label}</span>`;
         btn.addEventListener('click', () => {
@@ -590,8 +594,9 @@ function playChord() {
         });
     };
 
-    // suspended 상태에서는 오디오 시계가 멈춰 있어 resume 완료 후 예약해야 스트럼이 정확함
-    if (audioCtx.state === 'suspended') {
+    // suspended(또는 iOS 통화 등으로 인한 interrupted) 상태에서는 오디오 시계가
+    // 멈춰 있어 resume 완료 후 예약해야 스트럼이 정확하고 소리도 남
+    if (audioCtx.state !== 'running') {
         audioCtx.resume().then(strum).catch(e => {
             console.error('AudioContext를 재개할 수 없습니다:', e);
         });
@@ -621,10 +626,31 @@ function playTone(freq, startTime) {
 
     osc.connect(filter);
     filter.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
+    gainNode.connect(getMasterBus());
 
     osc.start(startTime);
     osc.stop(startTime + 2);
+}
+
+// 모든 음이 거쳐 가는 출력단: 여러 줄이 겹치거나 버튼을 연타해도 합산 음량이
+// 1.0을 넘어 소리가 찢어지지(클리핑) 않도록 살짝 낮춘 뒤 리미터로 막음
+function getMasterBus() {
+    if (!masterBus || masterBus.context !== audioCtx) {
+        const limiter = audioCtx.createDynamicsCompressor();
+        limiter.threshold.value = -6;
+        limiter.knee.value = 0;
+        limiter.ratio.value = 20;
+        limiter.attack.value = 0.002;
+        limiter.release.value = 0.2;
+        limiter.connect(audioCtx.destination);
+
+        const gain = audioCtx.createGain();
+        gain.gain.value = 0.8;
+        gain.connect(limiter);
+
+        masterBus = { context: audioCtx, input: gain };
+    }
+    return masterBus.input;
 }
 
 // 보드 초기화
