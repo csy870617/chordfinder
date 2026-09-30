@@ -90,45 +90,59 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+button {
+    font: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Keyboard focus ring (mouse/touch clicks don't show it) */
+button:focus-visible,
+summary:focus-visible,
+.toggle-switch input:focus-visible + .toggle-slider {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 .container {
     background: var(--surface);
-    padding: 1.75rem;
+    padding: 1.5rem;
     border-radius: 24px;
     width: 100%;
     max-width: 440px;
-    text-align: center;
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 /* ---------- Header ---------- */
 header {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 header h1 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 800;
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.4px;
+    letter-spacing: -0.3px;
     color: var(--text);
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .theme-toggle {
-    position: absolute;
-    top: -2px;
-    right: 0;
-    width: 36px;
-    height: 36px;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
     border: 1px solid var(--border);
-    background: var(--surface-2);
+    background: transparent;
     border-radius: 50%;
     color: var(--text);
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1;
     cursor: pointer;
     display: flex;
@@ -148,48 +162,40 @@ header h1 {
 }
 
 .pro-badge {
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     letter-spacing: 0.5px;
     background: var(--accent-soft);
     color: var(--accent);
-    padding: 3px 7px;
+    padding: 3px 6px;
     border-radius: 6px;
     font-weight: 700;
     align-self: center;
 }
 
-/* ---------- Section label spacing ---------- */
-.instrument-tabs,
-.root-selector,
-.type-selector,
-.options-bar {
-    margin-bottom: 14px;
-}
-
-/* ---------- Instrument tabs ---------- */
+/* ---------- Instrument tabs (segmented control) ---------- */
 .instrument-tabs {
     display: flex;
-    gap: 8px;
+    gap: 4px;
     background: var(--surface-2);
-    padding: 4px;
+    padding: 3px;
     border-radius: var(--radius-sm);
 }
 
 .tab-btn {
     flex: 1;
-    padding: 10px 14px;
+    padding: 7px 12px;
     background: transparent;
     border: none;
     border-radius: 8px;
     color: var(--text-muted);
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .tab-btn:hover {
@@ -203,194 +209,108 @@ header h1 {
 }
 
 .tab-icon {
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
-/* ---------- Root selector ---------- */
-.root-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-}
-
-.root-btn {
-    padding: 10px 4px;
-    background: var(--surface-2);
-    border: 1px solid transparent;
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.root-btn:hover {
-    border-color: var(--border-strong);
-}
-
-.root-btn.active {
-    background: var(--accent);
-    color: var(--on-accent);
-    border-color: var(--accent);
-}
-
-/* ---------- Type selector ---------- */
-.type-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-}
-
-.type-btn {
-    padding: 10px 6px;
-    background: var(--surface-2);
-    border: 1px solid transparent;
-    border-radius: 8px;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.type-btn:hover {
-    color: var(--text);
-    border-color: var(--border-strong);
-}
-
-.type-btn.active {
-    background: var(--accent-soft);
-    color: var(--accent);
-    border-color: var(--accent);
-}
-
-/* ---------- Options bar ---------- */
-.options-bar {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    padding: 12px 14px;
-    background: var(--surface-2);
-    border-radius: var(--radius-sm);
-    flex-wrap: wrap;
-}
-
-.option-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.option-label {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 600;
-}
-
-/* Capo control */
-.capo-control {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2px;
-}
-
-.capo-btn {
-    width: 26px;
-    height: 26px;
-    border: none;
-    background: transparent;
-    color: var(--accent);
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: background 0.15s;
-    line-height: 1;
-}
-
-.capo-btn:hover {
-    background: var(--accent-soft);
-}
-
-.capo-value {
-    width: 22px;
-    text-align: center;
-    font-weight: 700;
-    color: var(--text);
-    font-size: 0.92rem;
-}
-
-/* Toggle switch */
-.toggle-switch {
-    position: relative;
-    width: 42px;
-    height: 24px;
-    cursor: pointer;
-}
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle-slider {
-    position: absolute;
-    inset: 0;
-    background: var(--border-strong);
-    border-radius: 24px;
-    transition: background 0.2s;
-}
-
-.toggle-slider:before {
-    content: "";
-    position: absolute;
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background: #ffffff;
-    border-radius: 50%;
-    transition: transform 0.2s;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-}
-
-.toggle-switch input:checked + .toggle-slider {
-    background: var(--accent);
-}
-
-.toggle-switch input:checked + .toggle-slider:before {
-    transform: translateX(18px);
-}
-
-/* ---------- Fretboard ---------- */
-.fretboard-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1.25rem;
-}
-
-.fretboard-glass {
-    padding: 20px 20px 16px;
+/* ---------- Result card: chord info + fretboard + positions ---------- */
+.result-card {
     background: var(--board);
     border: 1px solid var(--board-border);
     border-radius: var(--radius);
+    padding: 16px 16px 12px;
+}
+
+.result-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.chord-title {
+    min-width: 0;
+    text-align: left;
+}
+
+#chord-name-display {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.chord-sounding {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.chord-sounding[hidden] {
+    display: none;
+}
+
+.chord-notes {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.4px;
+}
+
+/* Play button */
+.play-button {
+    flex-shrink: 0;
+    background: var(--accent);
+    border: none;
+    border-radius: 50px;
+    padding: 9px 16px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--on-accent);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.play-button:hover {
+    background: var(--accent-hover);
+}
+
+.play-button:active {
+    transform: scale(0.98);
+}
+
+.play-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.play-icon {
+    font-size: 0.8em;
+}
+
+/* ---------- Fretboard ---------- */
+.fretboard-glass {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
+    padding: 8px 0 4px;
     overflow: visible;
 }
 
 svg#fretboard {
     width: 100%;
-    max-width: 280px;
+    max-width: 250px;
     height: auto;
     display: block;
     overflow: visible;
@@ -466,17 +386,18 @@ svg#fretboard {
 .position-nav {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-top: 14px;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 4px;
 }
 
 .pos-nav-btn {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--accent);
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 700;
     border-radius: 50%;
     cursor: pointer;
@@ -498,146 +419,301 @@ svg#fretboard {
 }
 
 #position-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     font-weight: 600;
+    min-width: 72px;
+    display: inline-block;
+    text-align: center;
 }
 
-/* ---------- Chord info ---------- */
-.info-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
+/* ---------- Pickers (root / chord type) ---------- */
+.picker-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin: 0 0 6px 2px;
 }
 
-.chord-info-card {
-    width: 100%;
+/* One panel per picker; buttons are flat inside it so the grid reads as a
+   single control instead of a wall of separate boxes */
+.root-grid,
+.type-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
     background: var(--surface-2);
-    border-radius: var(--radius);
-    padding: 16px 24px;
-    border: 1px solid var(--border);
+    padding: 3px;
+    border-radius: var(--radius-sm);
 }
 
-#chord-name-display {
-    font-size: 1.4rem;
+.root-btn,
+.type-btn {
+    min-width: 0;
+    height: 34px;
+    padding: 0 2px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.root-btn {
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.type-btn {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.root-btn:hover,
+.type-btn:hover {
+    color: var(--text);
+    background: var(--surface);
+}
+
+.root-btn.active {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+}
+
+.type-btn.active {
+    background: var(--surface);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ---------- Options (collapsible) ---------- */
+.options-panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.options-panel summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--radius-sm);
+    user-select: none;
+}
+
+.options-panel summary::-webkit-details-marker {
+    display: none;
+}
+
+.options-title {
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--text);
-    letter-spacing: 0.2px;
-    margin-bottom: 4px;
 }
 
-.chord-notes {
-    font-size: 0.9rem;
+.options-summary {
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+    font-size: 0.78rem;
     color: var(--text-muted);
-    font-weight: 500;
-    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Play button */
-.play-button {
-    background: var(--accent);
-    border: none;
-    border-radius: 50px;
-    padding: 13px 30px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--on-accent);
+.options-chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.options-panel[open] .options-chevron {
+    transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.options-bar {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    padding: 4px 14px;
+}
+
+.option-item {
     display: flex;
     align-items: center;
-    gap: 9px;
-    transition: background 0.15s, transform 0.1s;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 44px;
 }
 
-.play-button:hover {
-    background: var(--accent-hover);
+.option-item + .option-item {
+    border-top: 1px solid var(--border);
 }
 
-.play-button:active {
-    transform: scale(0.98);
+.option-label {
+    font-size: 0.85rem;
+    color: var(--text);
+    font-weight: 500;
+    cursor: default;
 }
 
-.play-button:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
+label.option-label {
+    cursor: pointer;
 }
 
-.play-icon {
-    font-size: 0.85em;
+/* Capo control */
+.capo-control {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.capo-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--accent);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s;
+    line-height: 1;
+}
+
+.capo-btn:hover {
+    background: var(--accent-soft);
+}
+
+.capo-value {
+    width: 24px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--text);
+    font-size: 0.92rem;
+}
+
+/* Toggle switch */
+.toggle-switch {
+    position: relative;
+    width: 42px;
+    height: 24px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border-strong);
+    border-radius: 24px;
+    transition: background 0.2s;
+}
+
+.toggle-slider:before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: var(--accent);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(18px);
 }
 
 /* ---------- Related chords ---------- */
-.related-chords {
-    background: var(--surface-2);
-    border-radius: var(--radius);
-    padding: 16px;
-}
-
 .related-chords h3 {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    margin-bottom: 12px;
-    font-weight: 600;
+    margin: 0 0 6px 2px;
+    font-weight: 700;
 }
 
 .related-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .related-chord-btn {
-    padding: 10px 8px;
-    background: var(--surface);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 7px 12px;
+    background: transparent;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 999px;
     color: var(--text);
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 
 .related-chord-btn:hover {
     border-color: var(--accent);
     color: var(--accent);
+    background: var(--accent-soft);
 }
 
 .related-chord-btn .chord-label {
-    display: block;
-    font-size: 0.7em;
+    font-size: 0.72rem;
     color: var(--text-muted);
-    margin-top: 2px;
     font-weight: 500;
 }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 480px) {
+    body {
+        padding: 12px 12px 32px;
+    }
+
+    /* Drop the outer card on phones: one less box around everything */
     .container {
-        padding: 1.25rem;
-        border-radius: 20px;
-    }
-
-    header h1 {
-        font-size: 1.35rem;
-    }
-
-    .root-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .type-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .options-bar {
+        padding: 4px 4px 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
         gap: 14px;
     }
 
-    .related-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .result-card {
+        background: var(--surface);
+    }
+
+    #chord-name-display {
+        font-size: 1.45rem;
     }
 }
 

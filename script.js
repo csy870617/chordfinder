@@ -18,6 +18,8 @@ const fretMarkersGroup = document.getElementById('fret-markers');
 const nutElement = document.getElementById('nut');
 const chordNameDisplay = document.getElementById('chord-name-display');
 const chordNotesDisplay = document.getElementById('chord-notes');
+const chordSoundingDisplay = document.getElementById('chord-sounding');
+const optionsSummary = document.getElementById('options-summary');
 const playBtn = document.getElementById('play-btn');
 const prevPosBtn = document.getElementById('prev-pos-btn');
 const nextPosBtn = document.getElementById('next-pos-btn');
@@ -159,6 +161,7 @@ function setupCapoControls() {
         if (state.capo > 0) {
             state.capo--;
             capoValue.textContent = state.capo;
+            updateOptionsSummary();
             updateChord();
         }
     });
@@ -167,9 +170,20 @@ function setupCapoControls() {
         if (state.capo < 12) {
             state.capo++;
             capoValue.textContent = state.capo;
+            updateOptionsSummary();
             updateChord();
         }
     });
+}
+
+// 옵션 패널이 접혀 있어도 현재 설정을 알 수 있도록 요약 표시
+function updateOptionsSummary() {
+    if (!optionsSummary) return;
+    optionsSummary.textContent = [
+        `카포 ${state.capo}`,
+        state.showNotes ? '음이름' : '손가락 번호',
+        state.lefty ? '왼손' : '오른손'
+    ].join(' · ');
 }
 
 // 토글 설정
@@ -182,14 +196,17 @@ function setupToggles() {
     state.lefty = leftyToggle.checked;
     state.showNotes = noteToggle.checked;
     fretboardGlass.classList.toggle('lefty', state.lefty);
+    updateOptionsSummary();
 
     leftyToggle.addEventListener('change', (e) => {
         state.lefty = e.target.checked;
         fretboardGlass.classList.toggle('lefty', state.lefty);
+        updateOptionsSummary();
     });
 
     noteToggle.addEventListener('change', (e) => {
         state.showNotes = e.target.checked;
+        updateOptionsSummary();
         updateChord();
     });
 }
@@ -222,6 +239,7 @@ function updateChord() {
 
     if (!chordData || chordData.length === 0) {
         chordNameDisplay.textContent = `${root} ${formatTypeName(type)}`;
+        updateSoundingInfo(root, formatTypeName(type));
         chordNotesDisplay.textContent = '데이터 준비중';
         clearBoard();
         currentChordData = null;
@@ -239,15 +257,10 @@ function updateChord() {
 
     currentChordData = currentPositions[state.currentPosition];
 
-    // 코드명 표시 (카포 적용 시 실제 울리는 코드도 표시)
+    // 코드명 표시 (카포 적용 시 실제 울리는 코드는 별도 줄에 표시)
     const typeName = formatTypeName(type);
-    if (state.capo > 0) {
-        const soundingRootIndex = (noteNames.indexOf(root) + state.capo) % 12;
-        const soundingRoot = noteNames[soundingRootIndex];
-        chordNameDisplay.textContent = `${root} ${typeName} (실음: ${soundingRoot} ${typeName})`;
-    } else {
-        chordNameDisplay.textContent = `${root} ${typeName}`;
-    }
+    chordNameDisplay.textContent = `${root} ${typeName}`;
+    updateSoundingInfo(root, typeName);
 
     // 구성음 표시 (카포 적용 시 실제 울리는 구성음도 표시)
     if (typeof getChordNoteNames === 'function') {
@@ -271,6 +284,19 @@ function updateChord() {
 
     // 관련 코드 업데이트
     updateRelatedChords();
+}
+
+// 카포 사용 시 실제로 울리는 코드 안내 (카포 0이면 숨김)
+function updateSoundingInfo(root, typeName) {
+    if (!chordSoundingDisplay) return;
+    if (state.capo > 0) {
+        const soundingRoot = noteNames[(noteNames.indexOf(root) + state.capo) % 12];
+        chordSoundingDisplay.textContent = `카포 ${state.capo} · 실음 ${soundingRoot} ${typeName}`;
+        chordSoundingDisplay.hidden = false;
+    } else {
+        chordSoundingDisplay.textContent = '';
+        chordSoundingDisplay.hidden = true;
+    }
 }
 
 // 포지션 네비게이션 UI 업데이트
