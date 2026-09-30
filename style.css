@@ -378,8 +378,12 @@ svg#fretboard {
     pointer-events: none;
 }
 
+/* Open-string labels sit in a small r=7 circle; the class rule above would
+   override the 8px set on the element, letting "D#"/"G#" spill over the ring */
 .note-name-text.open {
     fill: var(--accent);
+    font-size: 8px;
+    letter-spacing: -0.3px;
 }
 
 /* ---------- Position navigation ---------- */

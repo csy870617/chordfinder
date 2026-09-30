@@ -152,7 +152,7 @@ const instrumentData = {
                     { frets: [-1, 6, 8, 8, 6, 6], fingers: [0, 1, 3, 4, 1, 1], position: 6 }
                 ],
                 "sus4": [
-                    { frets: [-1, 6, 6, 8, 8, 6], fingers: [0, 1, 1, 3, 4, 1], position: 6 }
+                    { frets: [-1, 6, 8, 8, 9, 6], fingers: [0, 1, 2, 3, 4, 1], position: 6 }
                 ],
                 "dim": [
                     { frets: [-1, -1, 1, 2, 1, 2], fingers: [0, 0, 1, 3, 2, 4], position: 1 }
@@ -524,7 +524,7 @@ const instrumentData = {
                     { frets: [0, 0, 1, 3], fingers: [0, 0, 1, 3], position: 1 }
                 ],
                 "dim": [
-                    { frets: [0, 3, 2, 3], fingers: [0, 2, 1, 3], position: 1 }
+                    { frets: [2, 3, 2, 3], fingers: [1, 3, 2, 4], position: 1 }
                 ],
                 "aug": [
                     { frets: [1, 0, 0, 3], fingers: [1, 0, 0, 4], position: 1 }
@@ -562,7 +562,7 @@ const instrumentData = {
                     { frets: [1, 1, 2, 4], fingers: [1, 1, 2, 4], position: 1 }
                 ],
                 "dim": [
-                    { frets: [1, 4, 3, 4], fingers: [1, 3, 2, 4], position: 1 }
+                    { frets: [0, 4, 3, 4], fingers: [0, 3, 2, 4], position: 1 }
                 ],
                 "aug": [
                     { frets: [2, 1, 1, 4], fingers: [2, 1, 1, 4], position: 1 }
@@ -601,7 +601,7 @@ const instrumentData = {
                     { frets: [2, 2, 3, 0], fingers: [1, 2, 3, 0], position: 1 }
                 ],
                 "dim": [
-                    { frets: [2, 0, 1, 0], fingers: [2, 0, 1, 0], position: 1 }
+                    { frets: [1, 2, 1, 2], fingers: [1, 3, 2, 4], position: 1 }
                 ],
                 "aug": [
                     { frets: [3, 2, 2, 5], fingers: [2, 1, 1, 4], position: 1 }
@@ -640,7 +640,7 @@ const instrumentData = {
                     { frets: [3, 3, 4, 1], fingers: [2, 3, 4, 1], position: 1 }
                 ],
                 "dim": [
-                    { frets: [0, 1, 2, 1], fingers: [0, 1, 3, 2], position: 1 }
+                    { frets: [2, 3, 2, 3], fingers: [1, 3, 2, 4], position: 1 }
                 ],
                 "aug": [
                     { frets: [0, 3, 3, 2], fingers: [0, 2, 3, 1], position: 1 }
@@ -718,7 +718,7 @@ const instrumentData = {
                     { frets: [3, 0, 1, 1], fingers: [3, 0, 1, 2], position: 1 }
                 ],
                 "dim": [
-                    { frets: [1, 0, 1, 2], fingers: [1, 0, 2, 3], position: 1 }
+                    { frets: [1, 2, 1, 2], fingers: [1, 3, 2, 4], position: 1 }
                 ],
                 "aug": [
                     { frets: [2, 1, 1, 4], fingers: [2, 1, 1, 4], position: 1 }
@@ -730,7 +730,7 @@ const instrumentData = {
                     { frets: [5, 5, 5, 5], fingers: [1, 1, 1, 1], position: 5 }
                 ],
                 "9": [
-                    { frets: [2, 3, 1, 3], fingers: [2, 3, 1, 4], position: 1 }
+                    { frets: [0, 3, 1, 0], fingers: [0, 3, 1, 0], position: 1 }
                 ]
             },
             "F#": {
@@ -765,10 +765,10 @@ const instrumentData = {
                     { frets: [1, 1, 2, 1], fingers: [1, 2, 3, 1], position: 1 }
                 ],
                 "6": [
-                    { frets: [3, 1, 2, 4], fingers: [3, 1, 2, 4], position: 1 }
+                    { frets: [3, 3, 2, 4], fingers: [2, 3, 1, 4], position: 1 }
                 ],
                 "9": [
-                    { frets: [3, 4, 2, 4], fingers: [2, 3, 1, 4], position: 1 }
+                    { frets: [1, 4, 2, 1], fingers: [1, 4, 2, 1], position: 1 }
                 ]
             },
             "G": {
@@ -873,7 +873,7 @@ const instrumentData = {
                     { frets: [2, 2, 0, 0], fingers: [1, 2, 0, 0], position: 1 }
                 ],
                 "dim": [
-                    { frets: [2, 0, 2, 0], fingers: [1, 0, 2, 0], position: 1 }
+                    { frets: [2, 3, 2, 3], fingers: [1, 3, 2, 4], position: 1 }
                 ],
                 "aug": [
                     { frets: [2, 1, 1, 4], fingers: [2, 1, 1, 4], position: 1 }
